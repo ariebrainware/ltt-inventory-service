@@ -93,3 +93,38 @@ func CreateInventory(c *gin.Context) {
 		Data: inventory,
 	})
 }
+
+func UpdateInventory(c *gin.Context) {
+	var inventory model.InventoryMaster
+	id := c.Param("id")
+
+	if err := c.ShouldBindJSON(&inventory); err != nil {
+		util.CallUserError(c, util.APIErrorParams{
+			Msg: "Invalid request payload",
+			Err: err,
+		})
+		return
+	}
+
+	db, err := config.ConnectMySQL()
+	if err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to connect to MySQL",
+			Err: err,
+		})
+		return
+	}
+
+	if err := db.Model(&inventory).Where("id = ?", id).Updates(inventory).Error; err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to update inventory",
+			Err: err,
+		})
+		return
+	}
+
+	util.CallSuccessOK(c, util.APISuccessParams{
+		Msg:  "Inventory updated successfully",
+		Data: inventory,
+	})
+}
