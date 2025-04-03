@@ -1,13 +1,28 @@
 package endpoint
 
 import (
+	"errors"
 	"strconv"
 
 	"github.com/ariebrainware/ltt-inventory-service/config"
 	"github.com/ariebrainware/ltt-inventory-service/model"
 	"github.com/ariebrainware/ltt-inventory-service/util"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
+
+func getDBConnectionOrHandleError(c *gin.Context) *gorm.DB {
+	db, err := config.ConnectMySQL()
+	if err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to connect to MySQL",
+			Err: err,
+		})
+		c.Abort()
+		return nil
+	}
+	return db
+}
 
 func parseQueryParams(c *gin.Context) (int, int, string) {
 	limit, _ := strconv.Atoi(c.Query("limit"))
@@ -16,12 +31,12 @@ func parseQueryParams(c *gin.Context) (int, int, string) {
 	return limit, offset, keyword
 }
 
-func fetchInventories(limit, offset int, keyword string) ([]model.InventoryMaster, error) {
+func fetchInventories(c *gin.Context, limit, offset int, keyword string) ([]model.InventoryMaster, error) {
 	var inventories []model.InventoryMaster
 
-	db, err := config.ConnectMySQL()
-	if err != nil {
-		return nil, err
+	db := getDBConnectionOrHandleError(c)
+	if db == nil {
+		return nil, errors.New("failed to connect to database")
 	}
 
 	query := db.Offset(offset).Order("created_at ASC")
@@ -45,7 +60,7 @@ func fetchInventories(limit, offset int, keyword string) ([]model.InventoryMaste
 func ListInventory(c *gin.Context) {
 	limit, offset, keyword := parseQueryParams(c)
 
-	inventories, err := fetchInventories(limit, offset, keyword)
+	inventories, err := fetchInventories(c, limit, offset, keyword)
 	if err != nil {
 		util.CallServerError(c, util.APIErrorParams{
 			Msg: "Failed to retrieve inventories",
@@ -71,15 +86,22 @@ func CreateInventory(c *gin.Context) {
 		return
 	}
 
-	db, err := config.ConnectMySQL()
-	if err != nil {
-		util.CallServerError(c, util.APIErrorParams{
-			Msg: "Failed to connect to MySQL",
-			Err: err,
+	db := getDBConnectionOrHandleError(c)
+	if db == nil {
+		return
+	}
+
+	// Check if the inventory already exists
+	var existingInventory model.InventoryMaster
+	if err := db.Where("product_name = ?", inventory.ProductName).First(&existingInventory).Error; err == nil {
+		util.CallUserError(c, util.APIErrorParams{
+			Msg: "Inventory already exists",
+			Err: errors.New("inventory already exists"),
 		})
 		return
 	}
 
+	// Create the new inventory
 	if err := db.Create(&inventory).Error; err != nil {
 		util.CallServerError(c, util.APIErrorParams{
 			Msg: "Failed to create inventory",
@@ -98,12 +120,8 @@ func GetInventory(c *gin.Context) {
 	id := c.Param("id")
 	var inventory model.InventoryMaster
 
-	db, err := config.ConnectMySQL()
-	if err != nil {
-		util.CallServerError(c, util.APIErrorParams{
-			Msg: "Failed to connect to MySQL",
-			Err: err,
-		})
+	db := getDBConnectionOrHandleError(c)
+	if db == nil {
 		return
 	}
 
@@ -114,11 +132,18 @@ func GetInventory(c *gin.Context) {
 		})
 		return
 	}
-
+	if inventory.ID == 0 {
+		util.CallUserError(c, util.APIErrorParams{
+			Msg: "Inventory not found",
+			Err: errors.New("inventory not found"),
+		})
+		return
+	}
 	util.CallSuccessOK(c, util.APISuccessParams{
 		Msg:  "Inventory retrieved successfully",
 		Data: inventory,
 	})
+	return
 }
 
 func UpdateInventory(c *gin.Context) {
@@ -133,12 +158,8 @@ func UpdateInventory(c *gin.Context) {
 		return
 	}
 
-	db, err := config.ConnectMySQL()
-	if err != nil {
-		util.CallServerError(c, util.APIErrorParams{
-			Msg: "Failed to connect to MySQL",
-			Err: err,
-		})
+	db := getDBConnectionOrHandleError(c)
+	if db == nil {
 		return
 	}
 
@@ -149,22 +170,18 @@ func UpdateInventory(c *gin.Context) {
 		})
 		return
 	}
-
 	util.CallSuccessOK(c, util.APISuccessParams{
 		Msg:  "Inventory updated successfully",
 		Data: inventory,
 	})
+	return
 }
 
 func DeleteInventory(c *gin.Context) {
 	id := c.Param("id")
 
-	db, err := config.ConnectMySQL()
-	if err != nil {
-		util.CallServerError(c, util.APIErrorParams{
-			Msg: "Failed to connect to MySQL",
-			Err: err,
-		})
+	db := getDBConnectionOrHandleError(c)
+	if db == nil {
 		return
 	}
 
