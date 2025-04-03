@@ -61,7 +61,7 @@ func main() {
 		auth.DELETE("/logout", endpoint.Logout)
 
 		auth.GET("/inventory", endpoint.ListInventory)
-		// auth.POST("/inventory", endpoint.CreateInventory)
+		auth.POST("/inventory", endpoint.CreateInventory)
 		// auth.GET("/inventory/:id", endpoint.GetInventory)
 		// auth.PATCH("/inventory/:id", endpoint.UpdateInventory)
 		// auth.DELETE("/inventory/:id", endpoint.DeleteInventory)
