@@ -1,5 +1,12 @@
 package model
 
+import (
+	"database/sql"
+	"time"
+)
+
+type DeletedAt sql.NullTime
+
 type InventoryDetails struct {
 	TransactionID          uint   `gorm:"primaryKey;not null" json:"transaction_id"`
 	InventoryMasterID      uint   `gorm:"not null" json:"inventory_master_id"` // as product_id, the naming just for clarity
@@ -10,4 +17,7 @@ type InventoryDetails struct {
 	TransactionAmount      int    `gorm:"not null" json:"transaction_amount"`                        // Total amount for the transaction
 	TransactionStatus      string `gorm:"type:varchar(50);not null" json:"transaction_status"`       // e.g., completed, pending, cancelled
 	TransactionNotes       string `gorm:"type:text" json:"transaction_notes"`                        // Optional notes for the transaction
+	CreatedAt              time.Time
+	UpdatedAt              time.Time
+	DeletedAt              DeletedAt `gorm:"index"`
 }
