@@ -37,7 +37,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to MySQL: %v", err)
 	}
-	db.AutoMigrate(&model.User{}, &model.Session{}, &model.Role{}, &model.InventoryMaster{}, &model.InventoryDetails{})
+	db.AutoMigrate(&model.User{}, &model.Session{}, &model.Role{}, &model.Permission{}, &model.InventoryMaster{}, &model.InventoryDetails{})
 
 	// Set Gin mode from config
 	gin.SetMode(cfg.GinMode)
