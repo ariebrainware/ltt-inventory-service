@@ -1,10 +1,17 @@
 package util
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
+
+var JWTSecret = getEnv("JWTSECRET", "")
+var JWTSecretByte = []byte(getEnv("JWTSECRET", ""))
 
 type APIResponse struct {
 	Success bool        `json:"success"`
@@ -96,4 +103,19 @@ func CallUserNotAuthorized(c *gin.Context, params APIErrorParams) {
 		Msg:     params.Msg,
 	}
 	c.JSON(http.StatusUnauthorized, response)
+}
+
+func getEnv(key, fallback string) string {
+	value, exists := os.LookupEnv(key)
+	if !exists {
+		return fallback
+	}
+	return value
+}
+
+func HashPassword(password string) (hashedPassword string) {
+	h := hmac.New(sha256.New, JWTSecretByte)
+	h.Write([]byte(password))
+	hashedPassword = hex.EncodeToString(h.Sum(nil))
+	return
 }
