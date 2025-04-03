@@ -61,7 +61,7 @@ jobs:
   #         --env=DBUSER=${{ secrets.DBUSER }} \
   #         --env=DBPASS=${{ secrets.DBPASS }} ${{ secrets.DOCKER_USERNAME }}/ltt-inventory:v1.0.dev-$SHORT_SHA
   prod_deploy:
-    runs-on: [self-hosted, production]
+    runs-on: [self-hosted, evo-demo]
     if: github.ref == 'refs/heads/main'
     steps:
     - name: Checkout code
