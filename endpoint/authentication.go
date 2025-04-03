@@ -84,7 +84,7 @@ func Login(c *gin.Context) {
 		SessionToken: tokenString,
 		ExpiresAt:    time.Now().Add(time.Hour * 1),
 		ClientIP:     c.ClientIP(),
-		Browser:      c.Request.UserAgent(),
+		UserAgent:    c.Request.UserAgent(),
 	}
 
 	if err := db.Create(&session).Error; err != nil {
