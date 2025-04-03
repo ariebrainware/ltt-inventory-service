@@ -128,3 +128,28 @@ func UpdateInventory(c *gin.Context) {
 		Data: inventory,
 	})
 }
+
+func DeleteInventory(c *gin.Context) {
+	id := c.Param("id")
+
+	db, err := config.ConnectMySQL()
+	if err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to connect to MySQL",
+			Err: err,
+		})
+		return
+	}
+
+	if err := db.Delete(&model.InventoryMaster{}, id).Error; err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to delete inventory",
+			Err: err,
+		})
+		return
+	}
+
+	util.CallSuccessOK(c, util.APISuccessParams{
+		Msg: "Inventory deleted successfully",
+	})
+}
