@@ -37,7 +37,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to MySQL: %v", err)
 	}
-	db.AutoMigrate(&model.User{}, &model.Session{}, &model.InventoryMaster{}, &model.InventoryDetails{})
+	db.AutoMigrate(&model.User{}, &model.Session{}, &model.Role{}, &model.InventoryMaster{}, &model.InventoryDetails{})
 
 	// Set Gin mode from config
 	gin.SetMode(cfg.GinMode)
@@ -58,6 +58,8 @@ func main() {
 	auth := r.Group("/")
 	auth.Use(middleware.ValidateLoginToken())
 	{
+		auth.DELETE("/logout", endpoint.Logout)
+
 		auth.GET("/inventory", endpoint.ListInventory)
 		// auth.POST("/inventory", endpoint.CreateInventory)
 		// auth.GET("/inventory/:id", endpoint.GetInventory)
