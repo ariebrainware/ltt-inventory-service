@@ -198,6 +198,7 @@ func Signup(c *gin.Context) {
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: hashedPassword,
+		RoleID:   1,
 	}
 
 	// Insert the new user into the database.
@@ -211,9 +212,9 @@ func Signup(c *gin.Context) {
 
 	// Generate a JWT token upon successful signup.
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"email": req.Email,
-		"exp":   time.Now().Add(time.Hour * 1).Unix(),
-		// "role_id": newUser.RoleID,
+		"email":   req.Email,
+		"exp":     time.Now().Add(time.Hour * 1).Unix(),
+		"role_id": newUser.RoleID,
 	})
 
 	tokenString, err := token.SignedString(util.JWTSecretByte)
