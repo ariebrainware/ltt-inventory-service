@@ -94,6 +94,33 @@ func CreateInventory(c *gin.Context) {
 	})
 }
 
+func GetInventory(c *gin.Context) {
+	id := c.Param("id")
+	var inventory model.InventoryMaster
+
+	db, err := config.ConnectMySQL()
+	if err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to connect to MySQL",
+			Err: err,
+		})
+		return
+	}
+
+	if err := db.First(&inventory, id).Error; err != nil {
+		util.CallServerError(c, util.APIErrorParams{
+			Msg: "Failed to retrieve inventory",
+			Err: err,
+		})
+		return
+	}
+
+	util.CallSuccessOK(c, util.APISuccessParams{
+		Msg:  "Inventory retrieved successfully",
+		Data: inventory,
+	})
+}
+
 func UpdateInventory(c *gin.Context) {
 	var inventory model.InventoryMaster
 	id := c.Param("id")

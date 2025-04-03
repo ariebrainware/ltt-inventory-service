@@ -62,10 +62,9 @@ func main() {
 
 		auth.GET("/inventory", endpoint.ListInventory)
 		auth.POST("/inventory", endpoint.CreateInventory)
-		// auth.GET("/inventory/:id", endpoint.GetInventory)
-		// auth.PATCH("/inventory/:id", endpoint.UpdateInventory)
-		// auth.DELETE("/inventory/:id", endpoint.DeleteInventory)
-		// auth.PUT("/inventory/:id", endpoint.TherapistApproval)
+		auth.GET("/inventory/:id", endpoint.GetInventory)
+		auth.PATCH("/inventory/:id", endpoint.UpdateInventory)
+		auth.DELETE("/inventory/:id", endpoint.DeleteInventory)
 	}
 
 	r.POST("/login", endpoint.Login)
