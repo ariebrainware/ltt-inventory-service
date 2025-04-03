@@ -3,7 +3,7 @@ window.onload = function() {
 
   // Change the URL to a local path to avoid CORS issues when opening via file://
   window.ui = SwaggerUIBundle({
-    url: "swagger.json",
+    url: "../swagger.json",
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [

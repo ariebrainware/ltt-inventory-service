@@ -1,5 +1,5 @@
 {
-    "openapi": "3.0.0",
+    "openapi": "3.1.0",
     "info": {
         "title": "LTT Inventory Service API",
         "description": "API documentation for endpoints defined in main.go",
@@ -7,7 +7,12 @@
     },
     "servers": [
         {
+            "description": "Local Server",
             "url": "http://localhost:19092"
+        },
+        {
+            "description": "Production Server",
+            "url": "https://api.ariebrainware:19092"
         }
     ],
     "paths": {
@@ -35,7 +40,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Successful login"
+                        "description": "Login successful"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -230,5 +235,301 @@
             }
         }
     },
-    "components": {}
+    "components": {
+        "schemas": {
+            "inventory_masters": {
+                "type": "object",
+                "description": "Inventory Master",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the inventory item"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Deletion timestamp for soft-delete implementation"
+                    },
+                    "product_name": {
+                        "type": "string",
+                        "description": "Name of the inventory item"
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Quantity of the inventory item"
+                    },
+                    "brand": {
+                        "type": "string",
+                        "description": "Brand of the inventory item"
+                    },
+                    "stock_in_hand": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "Current stock in hand"
+                    },
+                    "unit_price": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Unit price of the inventory item"
+                    },
+                    "supplier_id": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "ID of the supplier"
+                    },
+                    "remarks": {
+                        "type": "string",
+                        "description": "Remarks or additional information"
+                    }
+                }
+            },
+            "invetory_details": {
+                "description": "Inventory Details",
+                "type": "object",
+                "properties": {
+                    "transaction_id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "A unique identifier for each transaction involving the product."
+                    },
+                    "inventory_master_id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "The ID of the inventory_master associated with the transaction."
+                    },
+                    "transaction_type": {
+                        "type": "string",
+                        "description": "The type of transaction (e.g., 'purchase', 'sale', 'return')."
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The quantity of the product involved in the transaction."
+                    },
+                    "transaction_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "The date and time when the transaction occurred."
+                    },
+                    "transaction_description": {
+                        "type": "string",
+                        "description": "A description of the transaction."
+                    },
+                    "transaction_amount": {
+                        "type": "integer",
+                        "format": "int32",
+                        "description": "The monetary amount associated with the transaction."
+                    },
+                    "transaction_status": {
+                        "type": "string",
+                        "description": "The status of the transaction (e.g., 'completed', 'pending')."
+                    },
+                    "transaction_notes": {
+                        "type": "string",
+                        "description": "Any additional notes related to the transaction."
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Deletion timestamp for soft-delete implementation"
+                    }
+                }
+            },
+            "roles": {
+                "description": "User Role for further Role Base Access Control (RBAC) implementation",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the role"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the role"
+                    },
+                    "permissions": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "List of permissions associated with the role"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Deletion timestamp for soft-delete implementation"
+                    }
+                }
+            },
+            "sessions": {
+                "description": "User Session",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the session"
+                    },
+                    "session_token": {
+                        "type": "string",
+                        "description": "Session token"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the user associated with the session"
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Expiration timestamp of the session"
+                    },
+                    "client_ip": {
+                        "type": "string",
+                        "description": "IP address of the user"
+                    },
+                    "user_agent": {
+                        "type": "string",
+                        "description": "User agent string of the client or browser"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Deletion timestamp for soft-delete implementation"
+                    }
+                }
+            },
+            "users": {
+                "description": "User",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the user"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The full name of the user"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email address of the user"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "Hashed password of the user"
+                    },
+                    "role_id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the role associated with the user"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Deletion timestamp for soft-delete implementation"
+                    }
+                }
+            },
+            "suppliers": {
+                "description": "Supplier",
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "uint",
+                        "description": "ID of the supplier"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the supplier"
+                    },
+                    "address": {
+                        "type": "string",
+                        "description": "Address of the supplier"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "description": "Contact information of the supplier"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email address of the supplier"
+                    },
+                    "remarks": {
+                        "type": "string",
+                        "description": "Remarks or additional information about the supplier"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Creation timestamp"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Last update timestamp"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Deletion timestamp for soft-delete implementation"
+                    }
+                }
+            }
+        }
+    }
 }
