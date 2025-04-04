@@ -12,7 +12,7 @@
         },
         {
             "description": "Production Server",
-            "url": "https://api.ariebrainware:19092"
+            "url": "https://ltt-inventory-svc.ariebrainware"
         }
     ],
     "paths": {
