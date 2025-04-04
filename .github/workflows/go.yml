@@ -84,14 +84,6 @@ jobs:
         docker build -t ${{ secrets.DOCKER_USERNAME }}/ltt-inventory:v1.0.prod-$SHORT_SHA .
         docker push ${{ secrets.DOCKER_USERNAME }}/ltt-inventory:v1.0.prod-$SHORT_SHA
         
-    - name: Test ping to the database container
-      run: if ! ping -c 1 192.168.1.10 > /dev/null 2>&1; then
-          echo "Database container is not reachable at 192.168.1.10"
-          exit 1
-          else
-          echo "Database container is reachable at 192.168.1.10"
-          fi
-
     - name: Deploy ltt-inventory container
       run: |
         SHORT_SHA=${GITHUB_SHA:0:7}
