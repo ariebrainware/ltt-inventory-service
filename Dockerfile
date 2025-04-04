@@ -41,6 +41,10 @@ ENV APPNAME=$APPNAME \
     DBPASS=$DBPASS \
     JWTSECRET=$JWTSECRET
 
+# Set the container to use a specific network.
+ENV NETWORK=ltt-inventory-network \
+    IP=192.168.1.11
+
 # Set timezone to UTC+7.
 RUN apk add --no-cache tzdata && \
     cp /usr/share/zoneinfo/Asia/Bangkok /etc/localtime && \
