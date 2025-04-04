@@ -28,7 +28,7 @@ func tokenValidator(c *gin.Context, expectedToken string) bool {
 func setCorsHeaders(c *gin.Context) {
 	origin := os.Getenv("CORSALLOWORIGIN")
 	if origin == "" {
-		origin = "http://localhost:3000"
+		origin = "*"
 	}
 	c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
 
