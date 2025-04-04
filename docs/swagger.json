@@ -404,6 +404,22 @@
         },
         "/token/validate": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "summary": "Validate Token",
                 "description": "Check if the provided token is valid.",
                 "responses": {
@@ -418,6 +434,22 @@
         },
         "/logout": {
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "summary": "Logout",
                 "description": "Invalidate the current login token.",
                 "responses": {
@@ -432,6 +464,22 @@
         },
         "/inventory": {
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "summary": "List Inventory",
                 "description": "Retrieve a list of all inventory items.",
                 "responses": {
@@ -444,6 +492,22 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "summary": "Create Inventory",
                 "description": "Create a new inventory item.",
                 "requestBody": {
@@ -490,6 +554,22 @@
                 }
             ],
             "get": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "summary": "Get Inventory",
                 "description": "Retrieve details of an inventory item.",
                 "responses": {
@@ -505,6 +585,11 @@
                 }
             },
             "patch": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "summary": "Update Inventory",
                 "description": "Update an existing inventory item.",
                 "requestBody": {
@@ -541,6 +626,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
                 "summary": "Delete Inventory",
                 "description": "Delete an inventory item.",
                 "responses": {
