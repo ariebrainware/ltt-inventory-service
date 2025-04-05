@@ -544,11 +544,26 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "name": {
+                                    "product_name": {
                                         "type": "string"
                                     },
-                                    "quantity": {
+                                    "category": {
+                                        "type": "string"
+                                    },
+                                    "brand": {
+                                        "type": "string"
+                                    },
+                                    "stock_in_hand": {
                                         "type": "integer"
+                                    },
+                                    "unit_price": {
+                                        "type": "number"
+                                    },
+                                    "supplier_id": {
+                                        "type": "integer"
+                                    },
+                                    "remarks": {
+                                        "type": "string"
                                     }
                                 }
                             }
@@ -617,6 +632,17 @@
                         "bearerAuth": []
                     }
                 ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "summary": "Update Inventory",
                 "description": "Update an existing inventory item.",
                 "requestBody": {
@@ -626,11 +652,26 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "name": {
+                                    "product_name": {
                                         "type": "string"
                                     },
-                                    "quantity": {
+                                    "category": {
+                                        "type": "string"
+                                    },
+                                    "brand": {
+                                        "type": "string"
+                                    },
+                                    "stock_in_hand": {
                                         "type": "integer"
+                                    },
+                                    "unit_price": {
+                                        "type": "number"
+                                    },
+                                    "supplier_id": {
+                                        "type": "integer"
+                                    },
+                                    "remarks": {
+                                        "type": "string"
                                     }
                                 }
                             }
@@ -656,6 +697,17 @@
                 "security": [
                     {
                         "bearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "session-token",
+                        "in": "header",
+                        "description": "Bearer token for authentication",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "summary": "Delete Inventory",
